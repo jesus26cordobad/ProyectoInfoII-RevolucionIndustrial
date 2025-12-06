@@ -50,6 +50,20 @@ public:
         sprites["telar_normal"] = QPixmap(":/recursos/images/nivel1/telar_normal.png");
         sprites["telar_caliente"] = QPixmap(":/recursos/images/nivel1/telar_caliente.png");
         sprites["telar_averiado"] = QPixmap(":/recursos/images/nivel1/telar_averiado.png");
+        sprites["caja1"] = QPixmap(":recursos/images/nivel1/caja1.png");
+        sprites["caja2"] = QPixmap(":recursos/images/nivel1/caja2.png");
+
+        // INICIO NIVEL 2: FERROCARRIL
+        sprites["fondo_frame1"] = QPixmap(":/recursos/images/nivel2/fondo_frame1.png");
+        sprites["fondo_frame2"] = QPixmap(":/recursos/images/nivel2/fondo_frame2.png");
+        sprites["fondo_frame3"] = QPixmap(":/recursos/images/nivel2/fondo_frame3.png");
+        sprites["fondo_frame4"] = QPixmap(":/recursos/images/nivel2/fondo_frame4.png");
+        sprites["fondo_frame5"] = QPixmap(":/recursos/images/nivel2/fondo_frame5.png");
+        sprites["jugadornivel2"] = QPixmap(":/recursos/images/nivel2/jugadornivel2.png");
+        sprites["capataznivel2"] = QPixmap(":/recursos/images/nivel2/capataznivel2.png");
+        sprites["carbon"] = QPixmap(":/recursos/images/nivel2/carbon.png");
+        sprites["tren"] = QPixmap(":/recursos/images/nivel2/tren.png");
+        // FIN NIVEL 2
 
         verificarCarga();
     }
