@@ -9,6 +9,7 @@
 #include <map>
 #include <QPixmap>
 #include <QPainter>
+#include <QVector>
 
 class Telar;
 
@@ -51,8 +52,27 @@ public:
     void cargarSprites(const QString& spriteFrente, const QString& spriteEspalda,
                        const QString& spriteIzquierda, const QString& spriteDerecha);
 
+    // INICIO NIVEL 2: Funcionalidad de palear carbon
+
+    // Getters Nivel 2
+    int getFramePalear() const { return framePalearN2; }
+    bool estaPaleando() const { return paleandoN2; }
+
+    // Metodos Nivel 2
+    void cargarSpritesPalearN2(const QPixmap& spriteSheet);
+    void iniciarPalearN2();
+    void actualizarPalearN2(float deltaTime);
+    void activarAyudaN2(bool activar) { ayudandoN2 = activar; }
+    bool estaAyudandoN2() const { return ayudandoN2; }
+
+    // FIN NIVEL 2
+
 signals:
     void accionRealizada(int tipoAccion);
+
+    // INICIO NIVEL 2: Señales
+    void palearCompletadoN2();
+    // FIN NIVEL 2
 
 private:
     // Telares
@@ -92,6 +112,22 @@ private:
     void actualizarAnimacion(float deltaTime);
     void cambiarFrame();  // para controlar frames correctamente
     QPixmap getSpriteActual() const;
+
+    // INICIO NIVEL 2: Atributos de palear
+
+    bool ayudandoN2;
+    bool paleandoN2;
+    int framePalearN2;
+    float tiempoPalearN2;
+    float velocidadPalearN2;
+    float tiempoSinPalearN2;
+    QVector<QPixmap> spritesPalearN2;
+
+    static constexpr float VELOCIDAD_PALEAR_N2 = 0.2f;
+    static constexpr int TOTAL_FRAMES_PALEAR_N2 = 4;
+    static constexpr float TIEMPO_DESCANSO_AUTO_N2 = 2.0f;
+
+    // FIN NIVEL 2
 };
 
 #endif // CAPATAZ_H
