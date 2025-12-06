@@ -34,6 +34,14 @@ public:
     void dibujarAdvertencia(QPainter& painter, const QString& mensaje,
                             int x, int y);
 
+    // INICIO NIVEL 2: Barra de cansancio
+
+    void dibujarBarraCansancio(QPainter& painter, float cansancio, int x, int y);
+    void dibujarEstadisticasN2(QPainter& painter, int vidas, float cansancio,
+                               int trenesCompletados, int trenesObjetivo, float tiempo);
+
+    // FIN NIVEL 2
+
 private:
     // Configuración de colores
     QColor colorFondoHUD;
