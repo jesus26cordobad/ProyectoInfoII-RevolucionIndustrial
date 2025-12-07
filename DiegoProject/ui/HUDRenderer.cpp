@@ -2,8 +2,10 @@
 // Implementación del renderizador de HUD
 
 #include "HUDRenderer.h"
+#include "../utils/ResourceManager.h"
 #include <QFont>
 #include <QPainterPath>
+
 
 HUDRenderer::HUDRenderer()
     : colorFondoHUD(0, 0, 0, 180),
@@ -31,7 +33,8 @@ void HUDRenderer::dibujarEstadisticas(QPainter& painter, int metros, int objetiv
                        .arg(static_cast<int>(presion))
                        .arg(static_cast<int>(tiempoRestante));
 
-    painter.drawText(MARGEN + 10, MARGEN + 15, info);
+    QRect areaTexto(MARGEN + 10, MARGEN + 15, ANCHO_HUD - 20, ALTO_HUD - 20);
+    painter.drawText(areaTexto, Qt::AlignLeft | Qt::AlignTop, info);
 }
 
 void HUDRenderer::dibujarCorazonesVidas(QPainter& painter, int vidas, int xInicio) {
@@ -152,3 +155,155 @@ void HUDRenderer::dibujarAdvertencia(QPainter& painter, const QString& mensaje,
     painter.setFont(QFont("Arial", 14, QFont::Bold));
     painter.drawText(x, y, mensaje);
 }
+
+// INICIO NIVEL 2: Implementacion de barra de cansancio
+
+void HUDRenderer::dibujarBarraCansancio(QPainter& painter, float cansancio, int x, int y) {
+    painter.save();
+
+    int anchoBarra = 200;
+    int altoBarra = 25;
+
+    // Fondo de la barra
+    painter.fillRect(x, y, anchoBarra, altoBarra, QColor(50, 50, 50, 200));
+
+    // Calcular porcentaje
+    float porcentaje = cansancio / 100.0f;
+    if (porcentaje > 1.0f) porcentaje = 1.0f;
+
+    // Color segun nivel de cansancio
+    QColor colorBarra;
+    if (porcentaje < 0.5f) {
+        colorBarra = QColor(0, 255, 0);  // Verde
+    } else if (porcentaje < 0.75f) {
+        colorBarra = QColor(255, 200, 0);  // Amarillo
+    } else {
+        colorBarra = QColor(255, 0, 0);  // Rojo
+    }
+
+    // Barra de progreso
+    painter.fillRect(x, y, anchoBarra * porcentaje, altoBarra, colorBarra);
+
+    // Borde
+    painter.setPen(QPen(Qt::white, 2));
+    painter.drawRect(x, y, anchoBarra, altoBarra);
+
+    // Texto
+    painter.setPen(Qt::white);
+    painter.setFont(QFont("Arial", 12, QFont::Bold));
+    QString texto = QString("Cansancio: %1%").arg(static_cast<int>(cansancio));
+    painter.drawText(x, y - 5, texto);
+
+    painter.restore();
+}
+
+void HUDRenderer::dibujarEstadisticasN2(QPainter& painter, int vidas, float cansancio,
+                                        int trenesCompletados, int trenesObjetivo, float tiempo) {
+    painter.save();
+
+    // Fondo del HUD
+    painter.fillRect(MARGEN, MARGEN, ANCHO_HUD + 50, ALTO_HUD + 60, QColor(0, 0, 0, 180));
+
+    // Título
+    painter.setPen(Qt::white);
+    painter.setFont(QFont("Arial", 14, QFont::Bold));
+    painter.drawText(MARGEN + 10, MARGEN + 25, "NIVEL 2: FERROCARRIL");
+
+    painter.save();
+
+    if (vidas < 0) vidas = 0;
+    if (vidas > 5) vidas = 5;
+
+    int y = MARGEN + 35;
+    int xInicio = MARGEN + 10;
+    int size = 20;
+    int espaciado = 30;
+
+    for (int i = 0; i < vidas; i++) {
+        int x = xInicio + (i * espaciado);
+
+        // Crear path del corazón
+        QPainterPath corazon;
+        float centroX = x + size / 2.0f;
+        float centroY = y + size;
+
+        corazon.moveTo(centroX, centroY);
+        corazon.cubicTo(
+            centroX + size * 0.5f, centroY - size * 0.3f,
+            centroX + size * 0.5f, centroY - size * 0.8f,
+            centroX, centroY - size * 0.5f
+            );
+        corazon.cubicTo(
+            centroX - size * 0.5f, centroY - size * 0.8f,
+            centroX - size * 0.5f, centroY - size * 0.3f,
+            centroX, centroY
+            );
+
+        painter.setPen(QPen(QColor(139, 0, 0), 2));
+        painter.setBrush(QColor(220, 20, 60));
+        painter.drawPath(corazon);
+    }
+    painter.restore();
+
+    // Estadísticas (más abajo también)
+    painter.setFont(QFont("Arial", 12));
+    int yPos = MARGEN + 80;
+
+    QString stats = QString("Vagones: %1/%2 \nTiempo: %3s")
+                        .arg(trenesCompletados)
+                        .arg(trenesObjetivo)
+                        .arg(static_cast<int>(tiempo));
+
+    painter.drawText(MARGEN + 10, yPos, stats);
+
+    // Barra de cansancio
+    dibujarBarraCansancio(painter, cansancio, MARGEN + 10, MARGEN + 140);
+
+    painter.restore();
+}
+
+// FIN NIVEL 2
+
+// NIVEL 3
+void HUDRenderer::dibujarCorazones(QPainter& painter, int vidas, int x, int y) {
+    painter.save();
+
+    if (vidas < 0) vidas = 0;
+    if (vidas > 5) vidas = 5;
+
+    int size = 25;
+    int espaciado = 35;
+
+    for (int i = 0; i < vidas; i++) {
+        int corazonX = x + (i * espaciado);
+
+        // Crear path del corazón
+        QPainterPath corazon;
+        float centroX = corazonX + size / 2.0f;
+        float centroY = y + size;
+
+        corazon.moveTo(centroX, centroY);
+
+        // Lado derecho
+        corazon.cubicTo(
+            centroX + size * 0.5f, centroY - size * 0.3f,
+            centroX + size * 0.5f, centroY - size * 0.8f,
+            centroX, centroY - size * 0.5f
+            );
+
+        // Lado izquierdo
+        corazon.cubicTo(
+            centroX - size * 0.5f, centroY - size * 0.8f,
+            centroX - size * 0.5f, centroY - size * 0.3f,
+            centroX, centroY
+            );
+
+        // Dibujar corazón
+        painter.setPen(QPen(QColor(139, 0, 0), 2));
+        painter.setBrush(QColor(220, 20, 60));
+        painter.drawPath(corazon);
+    }
+
+    painter.restore();
+}
+//FIN NIVEL 3

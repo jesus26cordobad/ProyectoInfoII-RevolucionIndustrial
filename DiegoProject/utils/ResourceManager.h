@@ -50,6 +50,41 @@ public:
         sprites["telar_normal"] = QPixmap(":/recursos/images/nivel1/telar_normal.png");
         sprites["telar_caliente"] = QPixmap(":/recursos/images/nivel1/telar_caliente.png");
         sprites["telar_averiado"] = QPixmap(":/recursos/images/nivel1/telar_averiado.png");
+        sprites["caja1"] = QPixmap(":recursos/images/nivel1/caja1.png");
+        sprites["caja2"] = QPixmap(":recursos/images/nivel1/caja2.png");
+
+        // INICIO NIVEL 2: FERROCARRIL
+        sprites["fondo_frame1"] = QPixmap(":/recursos/images/nivel2/fondo_frame1.png");
+        sprites["fondo_frame2"] = QPixmap(":/recursos/images/nivel2/fondo_frame2.png");
+        sprites["fondo_frame3"] = QPixmap(":/recursos/images/nivel2/fondo_frame3.png");
+        sprites["fondo_frame4"] = QPixmap(":/recursos/images/nivel2/fondo_frame4.png");
+        sprites["fondo_frame5"] = QPixmap(":/recursos/images/nivel2/fondo_frame5.png");
+        sprites["jugadornivel2"] = QPixmap(":/recursos/images/nivel2/jugadornivel2.png");
+        sprites["capataznivel2"] = QPixmap(":/recursos/images/nivel2/capataznivel2.png");
+        sprites["carbon"] = QPixmap(":/recursos/images/nivel2/carbon.png");
+        sprites["tren"] = QPixmap(":/recursos/images/nivel2/tren.png");
+        // FIN NIVEL 2
+
+        // Nivel 3: El Puente
+        sprites["fondolevel3"] = cargarSprite(":/recursos/images/nivel3/fondolevel3.png");
+        sprites["moneda"] = cargarSprite(":/recursos/images/nivel3/moneda.png");
+        sprites["viga1"] = cargarSprite(":/recursos/images/nivel3/viga1.png");
+        sprites["viga3"] = cargarSprite(":/recursos/images/nivel3/viga3.png");
+        sprites["viga4"] = cargarSprite(":/recursos/images/nivel3/viga4.png");
+
+        // Jugador Nivel 3
+        sprites["jcorriendo_derecha"] = cargarSprite(":/recursos/images/nivel3/jcorriendo_derecha.png");
+        sprites["jcorriendo_izquierda"] = cargarSprite(":/recursos/images/nivel3/jcorriendo_izquierda.png");
+        sprites["persaltoderecha"] = cargarSprite(":/recursos/images/nivel3/persaltoderecha.png");
+        sprites["persaltoizquierda"] = cargarSprite(":/recursos/images/nivel3/persaltoizquierda.png");
+
+        // Ladrón
+        sprites["lcorriendo_derecha"] = cargarSprite(":/recursos/images/nivel3/lcorriendo_derecha.png");
+        sprites["lcorriendo_izquierda"] = cargarSprite(":/recursos/images/nivel3/lcorriendo_izquierda.png");
+        sprites["ladronsaltoderecha"] = cargarSprite(":/recursos/images/nivel3/ladronsaltoderecha.png");
+        sprites["ladronsaltoizquierda"] = cargarSprite(":/recursos/images/nivel3/ladronsaltoizquierda.png");
+
+        qDebug() << "Sprites de Nivel 3 cargados";
 
         verificarCarga();
     }
@@ -93,6 +128,13 @@ private:
     ResourceManager& operator=(const ResourceManager&) = delete;
 
     QMap<QString, QPixmap> sprites;
+    QPixmap cargarSprite(const QString& ruta) {
+        QPixmap sprite(ruta);
+        if (sprite.isNull()) {
+            qDebug() << "Error cargando sprite:" << ruta;
+        }
+        return sprite;
+    }
 };
 
 #endif // RESOURCEMANAGER_H
