@@ -2,8 +2,10 @@
 // Implementación del renderizador de HUD
 
 #include "HUDRenderer.h"
+#include "../utils/ResourceManager.h"
 #include <QFont>
 #include <QPainterPath>
+
 
 HUDRenderer::HUDRenderer()
     : colorFondoHUD(0, 0, 0, 180),
@@ -261,3 +263,48 @@ void HUDRenderer::dibujarEstadisticasN2(QPainter& painter, int vidas, float cans
 }
 
 // FIN NIVEL 2
+
+
+// NIVEL 3
+void HUDRenderer::dibujarCorazones(QPainter& painter, int vidas, int x, int y) {
+    painter.save();
+
+    if (vidas < 0) vidas = 0;
+    if (vidas > 5) vidas = 5;
+
+    int size = 25;
+    int espaciado = 35;
+
+    for (int i = 0; i < vidas; i++) {
+        int corazonX = x + (i * espaciado);
+
+        // Crear path del corazón
+        QPainterPath corazon;
+        float centroX = corazonX + size / 2.0f;
+        float centroY = y + size;
+
+        corazon.moveTo(centroX, centroY);
+
+        // Lado derecho
+        corazon.cubicTo(
+            centroX + size * 0.5f, centroY - size * 0.3f,
+            centroX + size * 0.5f, centroY - size * 0.8f,
+            centroX, centroY - size * 0.5f
+            );
+
+        // Lado izquierdo
+        corazon.cubicTo(
+            centroX - size * 0.5f, centroY - size * 0.8f,
+            centroX - size * 0.5f, centroY - size * 0.3f,
+            centroX, centroY
+            );
+
+        // Dibujar corazón
+        painter.setPen(QPen(QColor(139, 0, 0), 2));
+        painter.setBrush(QColor(220, 20, 60));
+        painter.drawPath(corazon);
+    }
+
+    painter.restore();
+}
+//FIN NIVEL 3

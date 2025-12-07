@@ -42,6 +42,14 @@ public:
 
     // FIN NIVEL 2
 
+
+    // NIVEL 3
+    void dibujarCorazones(QPainter& painter, int vidas, int x, int y);
+    // ✅ CORREGIDO: Renombrado de dibujar a dibujarEstadisticasN3 para evitar conflicto
+    void dibujarEstadisticasN3(QPainter& painter, int vidas, int puntaje,
+                               float tiempoRestante, int monedasRecolectadas, int monedasObjetivo);
+    // FIN NIVEL 3
+
 private:
     // Configuración de colores
     QColor colorFondoHUD;
