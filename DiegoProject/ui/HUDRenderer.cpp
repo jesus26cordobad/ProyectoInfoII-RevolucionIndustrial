@@ -264,6 +264,7 @@ void HUDRenderer::dibujarEstadisticasN2(QPainter& painter, int vidas, float cans
 
 // FIN NIVEL 2
 
+
 // NIVEL 3
 void HUDRenderer::dibujarCorazones(QPainter& painter, int vidas, int x, int y) {
     painter.save();

@@ -20,8 +20,16 @@ Capataz::Capataz(QObject *parent)
     tiempoReparacion(2.0f),
     tiempoReparacionActual(0.0f),
     reparando(false),
-    estaQuieto(true) {  // distinguir quieto/caminando
-
+    estaQuieto(true),
+    // INICIO NIVEL 2: Inicializacion de atributos de palear
+    ayudandoN2(false),
+    paleandoN2(false),
+    framePalearN2(0),
+    tiempoPalearN2(0.0f),
+    velocidadPalearN2(VELOCIDAD_PALEAR_N2),
+    tiempoSinPalearN2(0.0f)
+// FIN NIVEL 2
+{
     qDebug() << "Capataz creado";
 }
 
@@ -51,7 +59,7 @@ void Capataz::actualizar(float deltaTime) {
 
 // CICLO DE INTELIGENCIA ARTIFICIAL
 void Capataz::percibir() {
-    // 1. PERCEPCIÓN: Detectar telares con temperatura > 70%
+    // PERCEPCIÓN: Detectar telares con temperatura > 70%
     if (!reparando && telares != nullptr) {
         int indiceTelarCritico = detectarTelarCritico();
 
@@ -64,7 +72,7 @@ void Capataz::percibir() {
 }
 
 void Capataz::razonar() {
-    // 2. RAZONAMIENTO: Decidir si ir a reparar
+    // RAZONAMIENTO: Decidir si ir a reparar
     if (telarObjetivo != nullptr && !reparando) {
         float prioridad = calcularPrioridad(telarObjetivo);
 
@@ -75,7 +83,7 @@ void Capataz::razonar() {
 }
 
 void Capataz::actuar() {
-    // 3. ACCIÓN: Moverse y reparar
+    // ACCIÓN: Moverse y reparar
     if (telarObjetivo != nullptr) {
         float distancia = std::sqrt(
             std::pow(telarObjetivo->getPosX() - posX, 2) +
@@ -113,7 +121,7 @@ void Capataz::actuar() {
 }
 
 void Capataz::aprender() {
-    // 4. APRENDIZAJE: Actualizar frecuencias de fallos
+    // APRENDIZAJE: Actualizar frecuencias de fallos
     actualizarFrecuencias();
 }
 
@@ -270,3 +278,61 @@ void Capataz::dibujar(QPainter& painter) {
         painter.drawEllipse(QPointF(posX, posY - 50), 20, 20);
     }
 }
+
+// INICIO NIVEL 2: Implementacion de sistema de palear para ayudar al jugador
+
+void Capataz::cargarSpritesPalearN2(const QPixmap& spriteSheet) {
+    spritesPalearN2.clear();
+
+    // El sprite sheet tiene 4 frames horizontales
+    int frameWidth = spriteSheet.width() / TOTAL_FRAMES_PALEAR_N2;
+    int frameHeight = spriteSheet.height();
+
+    for (int i = 0; i < TOTAL_FRAMES_PALEAR_N2; i++) {
+        QPixmap frame = spriteSheet.copy(i * frameWidth, 0, frameWidth, frameHeight);
+        spritesPalearN2.append(frame);
+    }
+
+    qDebug() << "Sprites de palear N2 cargados para capataz:" << spritesPalearN2.size() << "frames";
+}
+
+void Capataz::iniciarPalearN2() {
+    if (!ayudandoN2) return;
+
+    paleandoN2 = true;
+    framePalearN2 = 0;
+    tiempoPalearN2 = 0.0f;
+    tiempoSinPalearN2 = 0.0f;
+}
+
+void Capataz::actualizarPalearN2(float deltaTime) {
+    if (!ayudandoN2) return;
+
+    if (!paleandoN2) {
+        // Actualizar tiempo sin palear para volver a frame inicial
+        tiempoSinPalearN2 += deltaTime;
+
+        if (tiempoSinPalearN2 >= TIEMPO_DESCANSO_AUTO_N2 && framePalearN2 != 0) {
+            framePalearN2 = 0;
+        }
+        return;
+    }
+
+    tiempoPalearN2 += deltaTime;
+
+    // Avanzar frame segun velocidad de palear
+    if (tiempoPalearN2 >= velocidadPalearN2) {
+        framePalearN2++;
+        tiempoPalearN2 = 0.0f;
+
+        // Si llego al ultimo frame, completar palear
+        if (framePalearN2 >= TOTAL_FRAMES_PALEAR_N2) {
+            framePalearN2 = 0;
+            paleandoN2 = false;
+            emit palearCompletadoN2();
+            qDebug() << "Capataz completo palear N2";
+        }
+    }
+}
+
+// FIN NIVEL 2

@@ -42,6 +42,7 @@ public:
 
     // FIN NIVEL 2
 
+
     // NIVEL 3
     void dibujarCorazones(QPainter& painter, int vidas, int x, int y);
     // ✅ CORREGIDO: Renombrado de dibujar a dibujarEstadisticasN3 para evitar conflicto

@@ -10,11 +10,7 @@ GameOverScreen::GameOverScreen()
     colorTexto(Qt::white),
     colorBoton(100, 100, 100),
     colorBotonPeligro(150, 50, 50) {
-
-    // Definir posiciones de botones (centrados)
-    botonVolverMenu = QRect(312, 400, 200, 50);
-    botonReintentar = QRect(312, 340, 200, 50);
-    botonSalir = QRect(312, 460, 200, 50);
+    // Las posiciones de los botones se calculan dinámicamente en dibujar()
 }
 
 GameOverScreen::~GameOverScreen() {
@@ -45,7 +41,19 @@ void GameOverScreen::dibujar(QPainter& painter, int ancho, int alto,
                         .arg(static_cast<int>(tiempoJugado));
     painter.drawText(QRect(0, 240, ancho, 80), Qt::AlignCenter, stats);
 
-    // Botones
+    // BOTONES CENTRADOS DINÁMICAMENTE
+    int anchoBoton = 200;
+    int altoBoton = 50;
+    int centroX = ancho / 2 - anchoBoton / 2;  // Centrar horizontalmente
+    int espaciadoVertical = 60;  // Espacio entre botones
+    int yInicial = 340;  // Y inicial para el primer botón
+
+    // Actualizar posiciones de botones centrados
+    botonReintentar = QRect(centroX, yInicial, anchoBoton, altoBoton);
+    botonVolverMenu = QRect(centroX, yInicial + espaciadoVertical, anchoBoton, altoBoton);
+    botonSalir = QRect(centroX, yInicial + espaciadoVertical * 2, anchoBoton, altoBoton);
+
+    // Dibujar botones
     painter.fillRect(botonReintentar, colorBoton);
     painter.fillRect(botonVolverMenu, colorBoton);
     painter.fillRect(botonSalir, colorBotonPeligro);
@@ -53,9 +61,9 @@ void GameOverScreen::dibujar(QPainter& painter, int ancho, int alto,
     // Texto de botones
     painter.setPen(colorTexto);
     painter.setFont(QFont("Arial", 16, QFont::Bold));
-    painter.drawText(botonReintentar, Qt::AlignCenter, "REINTENTAR");
-    painter.drawText(botonVolverMenu, Qt::AlignCenter, "VOLVER AL MENÚ");
-    painter.drawText(botonSalir, Qt::AlignCenter, "SALIR");
+    painter.drawText(botonReintentar, Qt::AlignCenter, "Reintentar");
+    painter.drawText(botonVolverMenu, Qt::AlignCenter, "Menú Principal");
+    painter.drawText(botonSalir, Qt::AlignCenter, "Salir");
 
     // Bordes de botones
     painter.setPen(QPen(Qt::white, 2));

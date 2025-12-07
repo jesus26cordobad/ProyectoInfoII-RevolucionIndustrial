@@ -65,6 +65,7 @@ public:
         sprites["tren"] = QPixmap(":/recursos/images/nivel2/tren.png");
         // FIN NIVEL 2
 
+
         // Nivel 3: El Puente
         sprites["fondolevel3"] = cargarSprite(":/recursos/images/nivel3/fondolevel3.png");
         sprites["moneda"] = cargarSprite(":/recursos/images/nivel3/moneda.png");
