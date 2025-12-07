@@ -23,7 +23,7 @@ Viga::Viga(float x, float y, TipoViga tipo, QWidget* parent)
         ancho = 400.0f;
         alto = 60.0f;
         break;
-    case SUELO:  // ✅ NUEVO
+    case SUELO:
         // No cargar sprite (será invisible o color sólido)
         ancho = 2000.0f;  // Muy ancho para cubrir toda la pantalla
         alto = 100.0f;
@@ -36,7 +36,7 @@ Viga::~Viga() {
 
 void Viga::dibujar(QPainter& painter) {
     if (tipo == SUELO) {
-        // ✅ Dibujar suelo con color sólido (marrón oscuro)
+        // Dibujar suelo con color sólido (marrón oscuro)
         painter.fillRect(posX, posY, ancho, alto, QColor(80, 60, 40));
         return;
     }
